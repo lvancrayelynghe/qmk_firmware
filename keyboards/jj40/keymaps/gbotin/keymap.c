@@ -1,22 +1,26 @@
 #include QMK_KEYBOARD_H
 
 // #include "keymap_french.h"
-#include "keymap_french_osx.h"
+#include "sendstring_french_osx.h"
+// #include "keymap_french_osx.h"
 
 enum layers {
   _AZERTY = 0,
   _LOWER,
   _RAISE,
+  _MAKRO,
   _FN1,
   _FN2,
-  _FN3,
+  _ADJUST,
 };
 
 enum custom_macros {
-  _WD_SLC = 0,
-  _LN_SLC,
-  _LN_DEL,
-  _LN_DUP,
+  WD_SLC = 0,
+  LN_SLC,
+  LN_DEL,
+  LN_DUP,
+  P_ARR,
+  P_THIS,
 };
 
 enum tap_dances {
@@ -25,15 +29,12 @@ enum tap_dances {
 
 #define LOWER  MO(_LOWER)
 #define RAISE  MO(_RAISE)
+#define MAKRO  MO(_MAKRO)
 #define FN1    MO(_FN1)
 #define FN2    MO(_FN2)
-#define FN3    MO(_FN3)
 
-/* Custom Macros */
-#define WD_SLC M(_WD_SLC)
-#define LN_SLC M(_LN_SLC)
-#define LN_DEL M(_LN_DEL)
-#define LN_DUP M(_LN_DUP)
+/* Tap Dances */
+#define TD_SC TD(TD_SHIFT_CAPS)
 
 /* Custom FR_OSX Overrides */
 #define MY_EURO LALT(FR_DLR)
@@ -42,6 +43,7 @@ enum tap_dances {
 #define MY_DEG  LSFT(FR_RPRN)
 #define MY_LABK FR_AT
 #define MY_RABK LSFT(FR_AT)
+#define MY_LOCK LCMD(LCTL(FR_Q))
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -51,95 +53,109 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | Tab  |   Q  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   M  | Enter|
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   W  |   X  |   C  |   V  |   B  |   N  |   ,  |   ;  |   :  |  Up  | FN3  |
+ * | Shift|   W  |   X  |   C  |   V  |   B  |   N  |   ,  |   ;  |   :  |  Up  | FN1  |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |  FN1 | Ctrl | Alt  | GUI  | Lower|    Space    | Raise| FN2  | Left | Down | Right|
+ * | Ctrl | Alt  | CMD  | MACRO| Lower|    Space    | Raise| FN2  | Left | Down | Right|
  * `-----------------------------------------------------------------------------------'
  */
 [_AZERTY] = LAYOUT_planck_mit( \
   KC_ESC,  FR_A,    FR_Z,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
   KC_TAB,  FR_Q,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    FR_M,    KC_ENT,  \
-  TD(TD_SHIFT_CAPS), FR_W,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    FR_COMM, FR_SCLN, FR_COLN, KC_UP,   FN3,     \
-  FN1,     KC_LCTL, KC_LALT, KC_LGUI, LOWER,       KC_SPC,       RAISE,   FN2,     KC_LEFT, KC_DOWN, KC_RGHT  \
+  TD_SC,   FR_W,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    FR_COMM, FR_SCLN, FR_COLN, KC_UP,   FN1,     \
+  MAKRO,   KC_LCTL, KC_LALT, KC_LCMD, LOWER,       KC_SPC,       RAISE,   FN2,     KC_LEFT, KC_DOWN, KC_RGHT  \
 ),
 
 /* Lower
  * ,-----------------------------------------------------------------------------------.
- * |      |   à  |      |   è  |      |      |      |   ù  |   (  |   )  |   _  |      |
+ * |      |   à  |      |   è  |      |   [  |   ]  |   ù  |      |      |   _  |  Del |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |   €  |      |      |   #  |   |  |   {  |   }  |   ^  |      |
+ * |      |      |      |      |      |      |   #  |      |      |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |   '  |   "  |   `  |      |      |   ~  |   !  |   [  |   ]  |      |      |
+ * |      |      |      |   ç  |      |      |      |      |      |   *  |  pUp |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      | HOLD |             |      |      |      |      |      |
+ * |      |      |      |      | HOLD |             |      |      | Home |  pDn |  End |
  * `-----------------------------------------------------------------------------------'
  */
 [_LOWER] = LAYOUT_planck_mit( \
-  _______, FR_AGRV, _______, FR_EGRV, _______, _______, _______, FR_UGRV, FR_LPRN, FR_RPRN, FR_UNDS, _______, \
-  _______, _______, _______, MY_EURO, _______, _______, MY_HASH, FR_PIPE, FR_LCBR, FR_RCBR, FR_CIRC, _______, \
-  _______, FR_APOS, FR_QUOT, FR_GRV,  _______, _______, FR_TILD, FR_EXLM, FR_LBRC, FR_RBRC, _______, _______, \
-  _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
+  _______, FR_AGRV, _______, FR_EGRV, _______, FR_LBRC, FR_RBRC, FR_UGRV, _______, _______, FR_UNDS, KC_DEL,  \
+  _______, _______, _______, _______, _______, _______, MY_HASH, _______, _______, _______, _______, _______, \
+  _______, _______, _______, FR_CCED, _______, _______, _______, _______, _______, FR_ASTR, KC_PGUP, _______, \
+  _______, _______, _______, _______, _______,      _______,     _______, _______, KC_HOME, KC_PGDN, KC_END   \
 ),
 
 /* Raise
  * ,-----------------------------------------------------------------------------------.
- * |      |   @  |      |   é  |      |      |      |      |   *  |   +  |   -  |      |
+ * |      |   @  |   &  |   é  |      |   (  |   )  |      |   !  |      |   -  |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |   $  |      |      |      |      |   /  |   %  |   =  |      |
+ * |      |      |      |   $  |      |   <  |   >  |      |      |      |   ^  |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |   ç  |      |      |   °  |   &  |   <  |   >  |      |      |
+ * |      |   '  |   "  |   `  |      |      |      |      |      |   %  |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             | HOLD |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_RAISE] = LAYOUT_planck_mit( \
-  _______, MY_AT,   _______, FR_EACU, _______, _______, _______, _______, FR_ASTR, FR_PLUS, FR_MINS, _______, \
-  _______, _______, _______, FR_DLR,  _______, _______, _______, _______, FR_SLSH, FR_PERC, FR_EQL,  _______, \
-  _______, _______, _______, FR_CCED, _______, _______, MY_DEG,  FR_AMP,  MY_LABK, MY_RABK, _______, _______, \
+  _______, MY_AT,   FR_AMP,  FR_EACU, _______, FR_LPRN, FR_RPRN, _______, FR_EXLM, _______, FR_MINS, _______, \
+  _______, _______, _______, FR_DLR,  _______, MY_LABK, MY_RABK, _______, _______, _______, FR_CIRC, _______, \
+  _______, FR_APOS, FR_QUOT, FR_GRV,  _______, _______, _______, _______, _______, FR_PERC, _______, _______, \
   _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
 ),
 
-/* Fn1
+/* FN1
  * ,-----------------------------------------------------------------------------------.
- * |      |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |  Del |
+ * |      |      |  mU  |      |  sU  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |  lC  |  mU  |  rC  |  sU  |      |      |   4  |   5  |   6  |      |      |
+ * |      |  mL  |  mD  |  mR  |  sD  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  mL  |  mD  |  mR  |  sD  |      |      |   1  |   2  |   3  |  pUp |      |
+ * |      |      |      |      |      |      |      |      |  lC  |  rC  |  pUp | HOLD |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | HOLD |      |      |      |      |             |   0  |   .  | Home |  pDn |  End |
+ * |      |      |      |      |      |             |      |      |      |  pDn |      |
  * `-----------------------------------------------------------------------------------'
- *
- * TODO : Mouse acceleration / constant
  */
-
 [_FN1] = LAYOUT_planck_mit( \
-  _______, FR_1,    FR_2,    FR_3,    FR_4,    FR_5,    FR_6,    FR_7,    FR_8,    FR_9,    FR_0,    KC_DEL,  \
-  _______, KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_D, _______, _______, FR_4,    FR_5,    FR_6,    _______, _______, \
-  _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, _______, _______, FR_1,    FR_2,    FR_3,    KC_PGUP, _______, \
-  _______, _______, _______, _______, _______,      _______,     FR_0,    FR_DOT,  KC_HOME, KC_PGDN, KC_END   \
+  _______, _______, KC_MS_U, _______, KC_WH_D, _______, _______, _______, _______, _______, _______, _______, \
+  _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_PGUP, _______, \
+  _______, _______, _______, _______, _______,      _______,     _______, _______, _______, KC_PGDN, _______  \
 ),
 
-/* Fn2
+/* FN2
  * ,-----------------------------------------------------------------------------------.
- * | Lock |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |      |  Tp  |  Tn  |  Tp  | Sleep|
+ * |      |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |      |  v-  |  v+  |  vM  |      |
+ * |      |      |      |      |      |      |      |      |      |      |      |   =  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |  b-  |  b+  |  bT  |      |
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | HOLD |      |      |      |
+ * | HOLD |      |      |      |      |             |      | HOLD |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
-
 [_FN2] = LAYOUT_planck_mit( \
-  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   _______, KC_MRWD, KC_MFFD, KC_MPLY, _______, \
-  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, KC_VOLD, KC_VOLU, KC_MUTE, _______, \
-  _______, _______, _______, _______, _______, _______, _______, _______, BL_DEC,  BL_INC,  BL_TOGG, _______, \
-  _______, _______, _______, _______, _______,      _______,     _______, _______, KC_VOLD, KC_VOLU, KC_MPLY  \
+  _______, FR_1,    FR_2,    FR_3,    FR_4,    FR_5,    FR_6,    FR_7,    FR_8,    FR_9,    FR_0,    _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, FR_EQL,  \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
 ),
 
-/* Fn3
+/* ADJUST
+ * ,-----------------------------------------------------------------------------------.
+ * | Lock |  F1  |  F2  |  F3  |  F4  |      |      |  Bu  |  Tp  |  Tn  |  Tp  |      |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |  F5  |  F6  |  F7  |  F8  |      |      |  Bd  |  v-  |  v+  |  vM  |      |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |      |  F9  |  F10 |  F11 |  F12 |      |      |      |  b-  |  b+  |  bT  |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      | HOLD |             | HOLD |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ */
+[_ADJUST] = LAYOUT_planck_mit( \
+  MY_LOCK, KC_F1,   KC_F2,   KC_F3,   KC_F4,   _______, _______, KC_BRIU, KC_MRWD, KC_MFFD, KC_MPLY, _______, \
+  _______, KC_F5,   KC_F6,   KC_F7,   KC_F10,  _______, _______, KC_BRID, KC_VOLD, KC_VOLU, KC_MUTE, _______, \
+  _______, KC_F5,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, BL_DEC,  BL_INC,  BL_TOGG, _______, \
+  _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
+),
+
+/* MAKRO
  * ,-----------------------------------------------------------------------------------.
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -152,8 +168,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * TODO
  */
 
-[_FN3] = LAYOUT_planck_mit( \
-  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+[_MAKRO] = LAYOUT_planck_mit( \
+  _______, _______, _______, _______, _______, P_THIS,  _______, _______, _______, _______, _______, P_ARR,   \
   _______, _______, _______, LN_DEL,  _______, _______, _______, _______, _______, LN_SLC,  _______, _______, \
   _______, WD_SLC,  _______, LN_DUP,  _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
@@ -166,87 +182,53 @@ void matrix_init_user() {
     rgblight_disable();
 }
 
-// Loop
-void matrix_scan_user(void) {
-  // Empty
-};
+uint32_t layer_state_set_user(uint32_t state) {
+  return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+}
 
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t keycode, uint8_t opt) {
-    if (record->event.pressed) {
-      switch(keycode) {
-
-        case _WD_SLC:
-          SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_RIGHT) SS_DOWN(X_LSHIFT) SS_TAP(X_LEFT) SS_UP(X_LSHIFT) SS_UP(X_LALT));
-          return false;
-
-        case _LN_SLC:
-          SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_LEFT) SS_UP(X_LGUI) SS_DOWN(X_LSHIFT) SS_DOWN(X_LGUI) SS_TAP(X_RIGHT) SS_UP(X_LGUI) SS_UP(X_LSHIFT));
-          return false;
-
-        case _LN_DEL:
-          SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_LEFT) SS_UP(X_LGUI) SS_DOWN(X_LSHIFT) SS_DOWN(X_LGUI) SS_TAP(X_RIGHT) SS_UP(X_LGUI) SS_UP(X_LSHIFT));
-          SEND_STRING(SS_TAP(X_BSPACE));
-          return false;
-
-        case _LN_DUP:
-          SEND_STRING(SS_LGUI("c") SS_TAP(X_RIGHT) SS_LGUI("v"));
-          return false;
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch(keycode) {
+    case WD_SLC:
+      if (record->event.pressed) {
+        SEND_STRING(SS_DOWN(X_LALT) SS_TAP(X_RIGHT) SS_DOWN(X_LSHIFT) SS_TAP(X_LEFT) SS_UP(X_LSHIFT) SS_UP(X_LALT));
       }
-    }
+      break;
 
-    return MACRO_NONE;
+    // case LN_SLC:
+    //   if (record->event.pressed) {
+    //     SEND_STRING(SS_LCTRL("a") SS_DOWN(X_LSHIFT) SS_LCTRL("e") SS_UP(X_LSHIFT));
+    //   }
+    //   break;
+
+    case LN_DEL:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTRL("a") SS_DOWN(X_LSHIFT) SS_LCTRL("e") SS_UP(X_LSHIFT));
+        SEND_STRING(SS_TAP(X_BSPACE));
+      }
+      break;
+
+    case LN_DUP:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LGUI("c") SS_TAP(X_END) SS_LGUI("v"));
+      }
+      break;
+
+    // case P_THIS:
+    //   if (record->event.pressed) {
+    //     SEND_STRING("$this");
+    //   }
+    //   break;
+
+    // case P_ARR:
+    //   if (record->event.pressed) {
+    //     SEND_STRING("->");
+    //   }
+    //   break;
+  }
+
+  return true;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_SHIFT_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS)
 };
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case LOWER:
-      if (record->event.pressed) {
-        rgblight_enable();
-        rgblight_sethsv(HSV_BLUE);
-        layer_on(_LOWER);
-      } else {
-        rgblight_disable();
-        layer_off(_LOWER);
-      }
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        rgblight_enable();
-        rgblight_sethsv(HSV_GREEN);
-        layer_on(_RAISE);
-      } else {
-        rgblight_disable();
-        layer_off(_RAISE);
-      }
-      break;
-    case FN1:
-    case FN3:
-      if (record->event.pressed) {
-        rgblight_enable();
-        rgblight_sethsv(HSV_RED);
-        layer_on(_FN1);
-      } else {
-        rgblight_disable();
-        layer_off(_FN1);
-      }
-      break;
-    case FN2:
-      if (record->event.pressed) {
-        rgblight_enable();
-        rgblight_sethsv(HSV_MAGENTA);
-        layer_on(_FN2);
-      } else {
-        rgblight_disable();
-        layer_off(_FN2);
-      }
-      break;
-    default:
-      return true;
-  }
-
-  return false;
-}
