@@ -1,8 +1,8 @@
 #include QMK_KEYBOARD_H
 
 // #include "keymap_french.h"
-#include "sendstring_french_osx.h"
 // #include "keymap_french_osx.h"
+#include "sendstring_french_osx.h"
 
 enum layers {
   _AZERTY = 0,
@@ -27,6 +27,7 @@ enum tap_dances {
   TD_SHIFT_CAPS = 0,
 };
 
+/* Layers */
 #define LOWER  MO(_LOWER)
 #define RAISE  MO(_RAISE)
 #define MAKRO  MO(_MAKRO)
@@ -36,6 +37,10 @@ enum tap_dances {
 /* Tap Dances */
 #define TD_SC TD(TD_SHIFT_CAPS)
 
+/* Custom Keycodes */
+#define MY_LSRT LGUI(KC_LEFT)
+#define MY_LEND LGUI(KC_RIGHT)
+
 /* Custom FR_OSX Overrides */
 #define MY_EURO LALT(FR_DLR)
 #define MY_HASH LALT(LSFT(FR_GRV))
@@ -43,7 +48,7 @@ enum tap_dances {
 #define MY_DEG  LSFT(FR_RPRN)
 #define MY_LABK FR_AT
 #define MY_RABK LSFT(FR_AT)
-#define MY_LOCK LCMD(LCTL(FR_Q))
+#define MY_LOCK LGUI(LCTL(FR_Q))
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -62,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC,  FR_A,    FR_Z,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
   KC_TAB,  FR_Q,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    FR_M,    KC_ENT,  \
   TD_SC,   FR_W,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    FR_COMM, FR_SCLN, FR_COLN, KC_UP,   FN1,     \
-  MAKRO,   KC_LCTL, KC_LALT, KC_LCMD, LOWER,       KC_SPC,       RAISE,   FN2,     KC_LEFT, KC_DOWN, KC_RGHT  \
+  MAKRO,   KC_LCTL, KC_LALT, KC_LGUI, LOWER,       KC_SPC,       RAISE,   FN2,     KC_LEFT, KC_DOWN, KC_RGHT  \
 ),
 
 /* Lower
@@ -78,9 +83,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT_planck_mit( \
   _______, FR_AGRV, _______, FR_EGRV, _______, FR_LBRC, FR_RBRC, FR_UGRV, _______, _______, FR_UNDS, KC_DEL,  \
-  _______, _______, _______, _______, _______, _______, MY_HASH, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, XXXXXXX, MY_HASH, _______, _______, _______, _______, _______, \
   _______, _______, _______, FR_CCED, _______, _______, _______, _______, _______, FR_ASTR, KC_PGUP, _______, \
-  _______, _______, _______, _______, _______,      _______,     _______, _______, KC_HOME, KC_PGDN, KC_END   \
+  _______, _______, _______, _______, _______,      _______,     _______, _______, MY_LSRT, KC_PGDN, MY_LEND  \
 ),
 
 /* Raise
@@ -89,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |      |      |   $  |      |   <  |   >  |      |      |      |   ^  |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |   '  |   "  |   `  |      |      |      |      |      |   %  |      |      |
+ * |      |   '  |   "  |   `  |      |   {  |   }  |      |      |   %  |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |             | HOLD |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
@@ -97,13 +102,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_RAISE] = LAYOUT_planck_mit( \
   _______, MY_AT,   FR_AMP,  FR_EACU, _______, FR_LPRN, FR_RPRN, _______, FR_EXLM, _______, FR_MINS, _______, \
   _______, _______, _______, FR_DLR,  _______, MY_LABK, MY_RABK, _______, _______, _______, FR_CIRC, _______, \
-  _______, FR_APOS, FR_QUOT, FR_GRV,  _______, _______, _______, _______, _______, FR_PERC, _______, _______, \
+  _______, FR_APOS, FR_QUOT, FR_GRV,  _______, FR_LCBR, FR_RCBR, _______, _______, FR_PERC, _______, _______, \
   _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
 ),
 
 /* FN1
  * ,-----------------------------------------------------------------------------------.
- * |      |      |  mU  |      |  sU  |      |      |      |      |      |      |      |
+ * |      |  lC  |  mU  |  rC  |  sU  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * |      |  mL  |  mD  |  mR  |  sD  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
@@ -113,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_FN1] = LAYOUT_planck_mit( \
-  _______, _______, KC_MS_U, _______, KC_WH_D, _______, _______, _______, _______, _______, _______, _______, \
+  _______, KC_BTN1, KC_MS_U, KC_BTN2, KC_WH_D, _______, _______, _______, _______, _______, _______, _______, \
   _______, KC_MS_L, KC_MS_D, KC_MS_R, KC_WH_U, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, KC_BTN1, KC_BTN2, KC_PGUP, _______, \
   _______, _______, _______, _______, _______,      _______,     _______, _______, _______, KC_PGDN, _______  \
@@ -127,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * | HOLD |      |      |      |      |             |      | HOLD |      |      |      |
+ * |      |      |      |      |      |             |      | HOLD |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_FN2] = LAYOUT_planck_mit( \
@@ -169,7 +174,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
 [_MAKRO] = LAYOUT_planck_mit( \
-  _______, _______, _______, _______, _______, P_THIS,  _______, _______, _______, _______, _______, P_ARR,   \
+  _______, _______, _______, _______, _______, P_THIS,  _______, _______, _______, _______, _______, KC_DEL,  \
   _______, _______, _______, LN_DEL,  _______, _______, _______, _______, _______, LN_SLC,  _______, _______, \
   _______, WD_SLC,  _______, LN_DUP,  _______, _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______,      _______,     _______, _______, _______, _______, _______  \
