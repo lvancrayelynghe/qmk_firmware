@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef OLED_DRIVER_ENABLE
   #undef OLED_FONT_H
-  #define OLED_FONT_H "glcdfont.c"
+  #define OLED_FONT_H "keymaps/fractory/lib/glcdfont_fractory.c"
 #endif
 
 // encoders
