@@ -1,6 +1,8 @@
 EXTRAKEY_ENABLE = yes
 ENCODER_ENABLE = yes
 RGBLIGHT_ENABLE = yes
+NKRO_ENABLE = yes
+MOUSEKEY_ENABLE = yes
 
 LTO_ENABLE = yes # Tiny build optimizations
 

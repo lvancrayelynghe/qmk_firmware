@@ -22,20 +22,22 @@
 `make git-submodule`
 
 ### ROADMAP 
-- Fractory logo
 - keymap (fr + osx) (quantum/keymap_extras/keymap_french_osx.h)
+- eeprom rgb config
+- Velocikey
 
-- logo -> ???
-- layer rgb 
-- rgb base sate
-- update_tri_layer_RGB -> ???
-- encoder resolution -> ???
-- oled font -> ???
-- is_keyboard_left() -> ???
-
-config.h -> OK
+RGB Base State          -> OK
+Fractory Logo           -> OK
+Oled Font               -> OK
+config.h                -> OK
+is_keyboard_left()      -> OK
+Encoder resolution      -> OK
+update_tri_layer_RGB    -> OK
+Layer RGB               -> OK
 
 ### Roadmap guides 
+- https://docs.qmk.fm/#/feature_velocikey
+- https://www.reddit.com/r/olkb/comments/94zmyf/custom_keycode_when_key_is_hit_while_holding_shift/
 - https://javl.github.io/image2cpp/
 - https://joric.github.io/qle/
 - https://cpp.hotexamples.com/fr/examples/-/-/update_tri_layer_RGB/cpp-update_tri_layer_rgb-function-examples.html

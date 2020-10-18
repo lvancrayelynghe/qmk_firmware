@@ -36,31 +36,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define UNUSED_PINS { F4 }
 
 #ifdef OLED_DRIVER_ENABLE
-  #undef OLED_FONT_H
-  #define OLED_FONT_H "keymaps/fractory/lib/glcdfont_fractory.c"
+    #undef OLED_FONT_H
+    #define OLED_FONT_H "keymaps/fractory/lib/glcdfont_fractory.c"
 #endif
 
-// encoders
+#ifdef MOUSEKEY_ENABLE
+    #define MOUSEKEY_WHEEL_DELAY 0
+#endif
+
 #ifdef ENCODER_ENABLE
-  #define ENCODERS_PAD_A { D4 }
-  #define ENCODERS_PAD_B { F5 }
-  #define ENCODERS_PAD_A_RIGHT { F5 }
-  #define ENCODERS_PAD_B_RIGHT { D4 }
-// #define ENCODER_RESOLUTION 2 // Tune encoder resolution
-// #define ENCODER_DIRECTION_FLIP // Switch encoder’s directions
+    #define ENCODERS_PAD_A { D4 }
+    #define ENCODERS_PAD_B { F5 }
+    #define ENCODERS_PAD_A_RIGHT { F5 }
+    #define ENCODERS_PAD_B_RIGHT { D4 }
+//   #define ENCODER_RESOLUTION 2 // Tune encoder resolution
+//   #define ENCODER_DIRECTION_FLIP // Switch encoder’s directions
 #endif
 
 #ifdef RGBLIGHT_ENABLE
-  #undef RGBLED_NUM
-  #define RGBLED_NUM 70
-  #define RGBLED_SPLIT { 35, 35 }
-  #define RGBLIGHT_SPLIT
-  #define RGBLIGHT_LIMIT_VAL 120
-  #define RGBLIGHT_ANIMATIONS
-  #define RGBLIGHT_HUE_STEP 6 // number of steps to cycle through the hue by
-  #define RGBLIGHT_SAT_STEP 6 // number of steps to increment the saturation by
-  #define RGBLIGHT_VAL_STEP 6 // number of steps to increment the brightness by
-  #define RGBLIGHT_SLEEP //  the RGB lighting will be switched off when the host goes to sleep
+    #undef RGBLED_NUM
+    #define RGBLED_NUM 70
+    #define RGBLED_SPLIT { 35, 35 }
+    #define RGBLIGHT_SPLIT
+    #define RGBLIGHT_LIMIT_VAL 100
+    #define RGBLIGHT_ANIMATIONS
+    #define RGBLIGHT_HUE_STEP 6 // number of steps to cycle through the hue by
+    #define RGBLIGHT_SAT_STEP 6 // number of steps to increment the saturation by
+    #define RGBLIGHT_VAL_STEP 6 // number of steps to increment the brightness by
+    #define RGBLIGHT_SLEEP //  the RGB lighting will be switched off when the host goes to sleep
+    #define RGBLIGHT_LAYERS
 #endif
 
  /* Set 0 if debouncing isn't needed */
