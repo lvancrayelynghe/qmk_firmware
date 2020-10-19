@@ -13,6 +13,7 @@
 
 #ifdef RGBLIGHT_ENABLE
 extern rgblight_config_t rgblight_config;
+rgblight_config_t        RGB_current_config;
 #endif
 
 extern uint8_t is_master;
@@ -124,7 +125,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   )
 };
 
-int RGB_current_mode;
 /* RGB IDs
 
         11 10 09 08 07 06         41 42 43 44 45 46
@@ -139,25 +139,25 @@ int RGB_current_mode;
 
 const rgblight_segment_t PROGMEM lower_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {  6,  5, HSV_WHITE },
-    { 13,  5, HSV_WHITE },
-    { 18,  5, HSV_WHITE },
-    { 35, 35, HSV_WHITE }
+    { 13,  5, HSV_WHITE }
+    // { 18,  5, HSV_WHITE }
+    // { 35, 35, HSV_WHITE }
 );
 
 const rgblight_segment_t PROGMEM raise_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     { 41,  5, HSV_WHITE },
-    { 47,  5, HSV_WHITE },
-    { 53,  5, HSV_WHITE },
-    {  0, 35, HSV_WHITE }
+    { 47,  5, HSV_WHITE }
+    // { 53,  5, HSV_WHITE }
+    // {  0, 35, HSV_WHITE }
 );
 
 const rgblight_segment_t PROGMEM adjust_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {  6,  5, HSV_WHITE },
     { 13,  5, HSV_WHITE },
-    { 18,  5, HSV_WHITE },
+    // { 18,  5, HSV_WHITE },
     { 41,  5, HSV_WHITE },
-    { 47,  5, HSV_WHITE },
-    { 53,  5, HSV_WHITE }
+    { 47,  5, HSV_WHITE }
+    // { 53,  5, HSV_WHITE }
 );
 
 const rgblight_segment_t PROGMEM shift_layers[] = RGBLIGHT_LAYER_SEGMENTS(
@@ -195,14 +195,46 @@ const rgblight_segment_t* const PROGMEM rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     gui_layers
 );
 
+#ifdef RGBLIGHT_ENABLE
+void save_rgb_config(void) {
+    RGB_current_config.enable = rgblight_config.enable;
+    RGB_current_config.mode   = rgblight_config.mode;
+    RGB_current_config.speed  = rgblight_config.speed;
+    RGB_current_config.hue    = rgblight_config.hue;
+    RGB_current_config.sat    = rgblight_config.sat;
+    RGB_current_config.val    = rgblight_config.val;
+}
+
+void restore_rgb_config(void) {
+    rgblight_set_speed_noeeprom(RGB_current_config.speed);
+
+    if (rgblight_config.mode != RGB_current_config.mode) {
+        rgblight_mode_noeeprom(RGB_current_config.mode);
+    }
+
+    if ((RGB_current_config.hue != rgblight_config.hue) || (RGB_current_config.sat != rgblight_config.sat) || (RGB_current_config.val != rgblight_config.val)) {
+        rgblight_sethsv_noeeprom(RGB_current_config.hue, RGB_current_config.sat, RGB_current_config.val);
+    }
+
+    if (rgblight_config.enable) {
+        rgblight_enable_noeeprom();
+    } else {
+        rgblight_disable_noeeprom();
+    }
+}
+#endif
+
 void keyboard_post_init_user(void) {
     rgblight_layers = rgb_layers;
 
-    // eeconfig_init();
-    rgblight_sethsv_noeeprom(HSV_WHITE);
+    save_rgb_config();
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, _QWERTY)) {
+        restore_rgb_config();
+    }
+
     rgblight_set_layer_state(0, !layer_state_cmp(state, _ADJUST) && layer_state_cmp(state, _LOWER));
     rgblight_set_layer_state(1, !layer_state_cmp(state, _ADJUST) && layer_state_cmp(state, _RAISE));
     rgblight_set_layer_state(2, layer_state_cmp(state, _LOWER) && layer_state_cmp(state, _RAISE));
@@ -210,26 +242,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-bool led_update_user(led_t led_state) {
-    // rgblight_set_layer_state(0, led_state.caps_lock);
-    return true;
-}
-
-void matrix_init_user(void) {
-    #ifdef RGBLIGHT_ENABLE
-        RGB_current_mode = rgblight_config.mode;
-    #endif
-}
-
 void update_tri_layer_RGB(uint8_t layer1, uint8_t layer2, uint8_t layer3) {
     if (layer_state_is(layer1) && layer_state_is(layer2)) {
         layer_on(layer3);
-        rgblight_sethsv_noeeprom(HSV_BLUE);
-        rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_SWIRL + 5);
     } else {
         layer_off(layer3);
-        rgblight_sethsv_noeeprom(HSV_WHITE);
-        rgblight_mode_noeeprom(0);
     }
 }
 
@@ -297,13 +314,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 layer_on(_LOWER);
                 update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-                rgblight_sethsv_noeeprom(HSV_BLUE);
-                rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_SWIRL + 5);
             } else {
                 layer_off(_LOWER);
                 update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-                rgblight_sethsv_noeeprom(HSV_WHITE);
-                rgblight_mode_noeeprom(0);
             }
 
             return false;
@@ -312,26 +325,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 layer_on(_RAISE);
                 update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-                rgblight_sethsv_noeeprom(HSV_BLUE);
-                rgblight_mode_noeeprom(RGBLIGHT_MODE_RAINBOW_SWIRL + 5);
             } else {
                 layer_off(_RAISE);
                 update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-                rgblight_sethsv_noeeprom(HSV_WHITE);
-                rgblight_mode_noeeprom(0);
             }
 
             return false;
             break;
-        // case ADJUST:
-        //     if (record->event.pressed) {
-        //         layer_on(_ADJUST);
-        //     } else {
-        //         layer_off(_ADJUST);
-        //     }
-
-        //     return false;
-        //     break;
+        case RGB_MOD:
+        case RGB_TOG:
+        case RGB_HUI:
+        case RGB_HUD:
+        case RGB_SAI:
+        case RGB_SAD:
+        case RGB_VAI:
+        case RGB_VAD:
+        case RGB_SPI:
+        case RGB_SPD:
+            /* Override layer-based RGB and resume RGB effect to be able to preview changes */
+            if (! record->event.pressed) {
+                restore_rgb_config();
+                // Split keyboards need to trigger on key-up for edge-case issue
+                // See : quantum/process_keycode/process_rgb.c#L58
+                process_rgb(keycode, record);
+                save_rgb_config();
+            }
+            return false;
     }
 
     return true;
@@ -368,11 +387,5 @@ void encoder_update_user(uint8_t index, bool clockwise) {
             unregister_code(KC_LSHIFT);
         }
     }
-
-    // if (clockwise) {
-    //     tap_code(KC_VOLU);
-    // } else {
-    //     tap_code(KC_VOLD);
-    // }
 }
 #endif // ENCODER_ENABLE

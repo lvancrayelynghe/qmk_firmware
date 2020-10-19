@@ -58,11 +58,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     #define RGBLED_NUM 70
     #define RGBLED_SPLIT { 35, 35 }
     #define RGBLIGHT_SPLIT
-    #define RGBLIGHT_LIMIT_VAL 100
+    #define RGBLIGHT_LIMIT_VAL 80
     #define RGBLIGHT_ANIMATIONS
-    #define RGBLIGHT_HUE_STEP 6 // number of steps to cycle through the hue by
-    #define RGBLIGHT_SAT_STEP 6 // number of steps to increment the saturation by
-    #define RGBLIGHT_VAL_STEP 6 // number of steps to increment the brightness by
+    #define RGBLIGHT_HUE_STEP 16 // number of steps to cycle through the hue by
+    #define RGBLIGHT_SAT_STEP 16 // number of steps to increment the saturation by
+    #define RGBLIGHT_VAL_STEP 8 // number of steps to increment the brightness by
     #define RGBLIGHT_SLEEP //  the RGB lighting will be switched off when the host goes to sleep
     #define RGBLIGHT_LAYERS
 #endif
