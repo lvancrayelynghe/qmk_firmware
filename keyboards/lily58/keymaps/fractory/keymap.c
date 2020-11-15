@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 
-// #include "keymap_french_osx.h"
+#include "keymap_french_osx.h"
 
 #ifdef PROTOCOL_LUFA
     #include "lufa.h"
@@ -12,8 +12,8 @@
 #endif
 
 #ifdef RGBLIGHT_ENABLE
-extern rgblight_config_t rgblight_config;
-rgblight_config_t        RGB_current_config;
+    extern rgblight_config_t rgblight_config;
+    rgblight_config_t        RGB_current_config;
 #endif
 
 extern uint8_t is_master;
@@ -21,17 +21,17 @@ extern bool is_keyboard_left(void);
 
 bool is_cmd_tab_active = false;
 uint16_t cmd_tab_timer = 0;
-unsigned int cmd_tab_delay = 500;
+unsigned int cmd_tab_delay = 1000;
 
 enum layer_names {
-    _QWERTY,
+    _AZERTY,
     _LOWER,
     _RAISE,
     _ADJUST
 };
 
 enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
+  AZERTY = SAFE_RANGE,
   LOWER,
   RAISE,
   ADJUST,
@@ -39,35 +39,36 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-/* QWERTY
+/* AZERTY
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * | ESC  |   &  |   é  |   "  |   '  |   (  |                    |   §  |   è  |   !  |   ç  |   à  |BackSP|
+ * | ESC  |   '  |   @  |   #  |   $  |   (  |                    |   )  |   &  |   *  |   -   |  =  |BackSP|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   A  |   Z  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  -   |
+ * | Tab  |   a  |   z  |   e  |   r  |   t  |                    |   y  |   u  |   i  |   o  |   p  |  pUp |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |LShift|   Q  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   M  |  '   |
- * |------+------+------+------+------+------|   [   |    |       |------+------+------+------+------+------|
- * |LCTRL |   W  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   ,  |   ;  |   :  |   =  |RShift|
+ * |LShift|   q  |   s  |   d  |   f  |   g  |-------.    ,-------|   h  |   j  |   k  |   m  |   m  |  pDn |
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
+ * |LCTRL |   w  |   x  |   c  |   v  |   b  |-------|    |-------|   n  |   ,  |   .  |   :  |   /  |  End |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `----------------------------'           '------''--------------------'
  */
-[_QWERTY] = LAYOUT( \
+[_AZERTY] = LAYOUT( \
   KC_ESC,    KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
   KC_TAB,    KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS, \
   KC_LSFT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
-  KC_LCTRL,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, KC_LBRC,  XXXXXXX,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT, \
+  KC_LCTRL,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, XXXXXXX,  XXXXXXX,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT, \
                         KC_LALT, KC_LGUI, LOWER, KC_SPC, KC_ENT, RAISE, _______, KC_RGUI \
 ),
+
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |   à  |      |  è   |      |      |                    |      |      |      |      |      |      |
+ * |   `  |  "   |      |      |      |   [  |                    |   ]  |      |      |      |      |  Del |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |      |      |   é  |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------.    ,-------|      |      |      |      |      |      |
- * |------+------+------+------+------+------|   [   |    |       |------+------+------+------+------+------|
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |      |      |   ç  |      |      |-------|    |-------|      |      |      |      |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
@@ -83,12 +84,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 /* RAISE
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |   ~  |   ^  |      |      |      |   {  |                    |   }  |      |      |   _  |   +  |  Del |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      | pUp  |
+ * |      |   à  |      |   è  |      |      |                    |      |   ù  |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------| Left | Down |  Up  |Right |      | pDn  |
- * |------+------+------+------+------+------|   [   |    |       |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------.    ,-------| Left | Down |  Up  |Right |      |      |
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
@@ -102,15 +103,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,   _______, XXXXXXX,  KC_PLUS, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS, \
                              _______, _______, _______,  _______, _______,  _______, _______, _______ \
 ),
+/* SHIFTED
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |      |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------.    ,-------|      |      |      |      |      |      |
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------|    |-------|      |   <  |   >  |   :  |   ?  |      |
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
+ *                   |      |      |      |/       /         \      \ |      |      |      |
+ *                   `----------------------------'           '------''--------------------'
+ */
+[_AZERTY] = LAYOUT( \
+  KC_ESC,    KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                     KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
+  KC_TAB,    KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                     KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_MINS, \
+  KC_LSFT,   KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                     KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
+  KC_LCTRL,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B, KC_LBRC,  XXXXXXX,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT, \
+                        KC_LALT, KC_LGUI, LOWER, KC_SPC, KC_ENT, RAISE, _______, KC_RGUI \
+),
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  | F10  | F11  | F12  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |      |  mUp |      |      |      |                    |      |      |      |      |      |  pUp |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------|      |      |RGB ON| HUE+ | SAT+ | VAL+ |
+ * |      |  mLt |  mDn | mRt  |      |      |-------.    ,-------|      |RGB ON| HUE+ | SAT+ | VAL+ |  pDn |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|      |      | MODE | HUE- | SAT- | VAL- |
+ * |      |      |      |      |      |      |-------|    |-------|      | MODE | HUE- | SAT- | VAL- |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
  *                   |      |      |      |/       /         \      \ |      |      |      |
@@ -140,47 +162,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const rgblight_segment_t PROGMEM lower_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {  6,  5, HSV_WHITE },
     { 13,  5, HSV_WHITE }
-    // { 18,  5, HSV_WHITE }
-    // { 35, 35, HSV_WHITE }
 );
 
 const rgblight_segment_t PROGMEM raise_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     { 41,  5, HSV_WHITE },
     { 47,  5, HSV_WHITE }
-    // { 53,  5, HSV_WHITE }
-    // {  0, 35, HSV_WHITE }
 );
 
 const rgblight_segment_t PROGMEM adjust_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {  6,  5, HSV_WHITE },
     { 13,  5, HSV_WHITE },
-    // { 18,  5, HSV_WHITE },
     { 41,  5, HSV_WHITE },
     { 47,  5, HSV_WHITE }
-    // { 53,  5, HSV_WHITE }
 );
 
 const rgblight_segment_t PROGMEM shift_layers[] = RGBLIGHT_LAYER_SEGMENTS(
-    // { 31, 1, HSV_CORAL },
-    // { 66, 1, HSV_CORAL }
     { 65, 1, HSV_CORAL }
 );
 
 const rgblight_segment_t PROGMEM control_layers[] = RGBLIGHT_LAYER_SEGMENTS(
-    // { 31, 1, HSV_CHARTREUSE },
-    // { 66, 1, HSV_CHARTREUSE }
     { 65, 1, HSV_CHARTREUSE }
 );
 
 const rgblight_segment_t PROGMEM alt_layers[] = RGBLIGHT_LAYER_SEGMENTS(
-    // { 31, 1, HSV_CYAN },
-    // { 66, 1, HSV_CYAN }
     { 65, 1, HSV_CYAN }
 );
 
 const rgblight_segment_t PROGMEM gui_layers[] = RGBLIGHT_LAYER_SEGMENTS(
-    // { 31, 1, HSV_GOLD },
-    // { 66, 1, HSV_GOLD }
     { 65, 1, HSV_GOLD }
 );
 
@@ -231,7 +239,7 @@ void keyboard_post_init_user(void) {
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    if (layer_state_cmp(state, _QWERTY)) {
+    if (layer_state_cmp(state, _AZERTY)) {
         restore_rgb_config();
     }
 
@@ -303,9 +311,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
-        case QWERTY:
+        case AZERTY:
             if (record->event.pressed) {
-                set_single_persistent_default_layer(_QWERTY);
+                set_single_persistent_default_layer(_AZERTY);
             }
 
             return false;
@@ -358,7 +366,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef ENCODER_ENABLE
 void encoder_update_user(uint8_t index, bool clockwise) {
-    if (IS_LAYER_ON(_QWERTY)) {
+    if (IS_LAYER_ON(_AZERTY)) {
         register_code(KC_LCTRL);
 
         if (clockwise) {

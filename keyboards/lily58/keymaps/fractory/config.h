@@ -65,6 +65,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     #define RGBLIGHT_VAL_STEP 8 // number of steps to increment the brightness by
     #define RGBLIGHT_SLEEP //  the RGB lighting will be switched off when the host goes to sleep
     #define RGBLIGHT_LAYERS
+
+    // RGBLIGHT_ANIMATIONS // Enable all additional animation modes.
+    // RGBLIGHT_EFFECT_ALTERNATING // Enable alternating animation mode.
+    // RGBLIGHT_EFFECT_BREATHING // Enable breathing animation mode.
+    // RGBLIGHT_EFFECT_CHRISTMAS // Enable christmas animation mode.
+    // RGBLIGHT_EFFECT_KNIGHT // Enable knight animation mode.
+    #define RGBLIGHT_EFFECT_RAINBOW_MOOD // Enable rainbow mood animation mode.
+    // RGBLIGHT_EFFECT_RAINBOW_SWIRL // Enable rainbow swirl animation mode.
+    // RGBLIGHT_EFFECT_RGB_TEST // Enable RGB test animation mode.
+    // RGBLIGHT_EFFECT_SNAKE // Enable snake animation mode.
+    #define RGBLIGHT_EFFECT_STATIC_GRADIENT // Enable static gradient mode.
+    // RGBLIGHT_EFFECT_TWINKLE // Enable twinkle animation mode.
 #endif
 
  /* Set 0 if debouncing isn't needed */

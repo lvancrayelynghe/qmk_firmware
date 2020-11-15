@@ -21,6 +21,11 @@
 - Update build dependancies
 `make git-submodule`
 
+## Ideas
+- Raise + OS + Enc -> alt+tab
+- Page Up & Down -> navigate up down in text (mod tap ??)
+- End -> text nav end
+
 ### ROADMAP 
 - keymap (fr + osx) (quantum/keymap_extras/keymap_french_osx.h)
 - eeprom rgb config
