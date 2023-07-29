@@ -48,3 +48,6 @@ Layer RGB               -> OK
 - https://cpp.hotexamples.com/fr/examples/-/-/update_tri_layer_RGB/cpp-update_tri_layer_rgb-function-examples.html
 - https://www.reddit.com/r/olkb/comments/ea1rly/how_do_i_change_the_default_colors_of_rgb/
 - keyboards/crkbd/keymaps/gotham
+
+SHIFT -> CHECK :
+https://www.reddit.com/r/olkb/comments/av2mrb/qmk_is_it_possible_to_combine_lt_and_lm_on_the/

@@ -40,10 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     #define OLED_FONT_H "keymaps/fractory/lib/glcdfont_fractory.c"
 #endif
 
-#ifdef MOUSEKEY_ENABLE
-    #define MOUSEKEY_WHEEL_DELAY 0
-#endif
-
 #ifdef ENCODER_ENABLE
     #define ENCODERS_PAD_A { D4 }
     #define ENCODERS_PAD_B { F5 }
@@ -58,11 +54,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     #define RGBLED_NUM 70
     #define RGBLED_SPLIT { 35, 35 }
     #define RGBLIGHT_SPLIT
-    #define RGBLIGHT_LIMIT_VAL 80
-    #define RGBLIGHT_ANIMATIONS
-    #define RGBLIGHT_HUE_STEP 16 // number of steps to cycle through the hue by
-    #define RGBLIGHT_SAT_STEP 16 // number of steps to increment the saturation by
-    #define RGBLIGHT_VAL_STEP 8 // number of steps to increment the brightness by
+    #define RGBLIGHT_LIMIT_VAL 120
+    #define RGBLIGHT_HUE_STEP 10 // number of steps to cycle through the hue by
+    #define RGBLIGHT_SAT_STEP 10 // number of steps to increment the saturation by
+    #define RGBLIGHT_VAL_STEP 10 // number of steps to increment the brightness by
     #define RGBLIGHT_SLEEP //  the RGB lighting will be switched off when the host goes to sleep
     #define RGBLIGHT_LAYERS
 
@@ -72,7 +67,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     // RGBLIGHT_EFFECT_CHRISTMAS // Enable christmas animation mode.
     // RGBLIGHT_EFFECT_KNIGHT // Enable knight animation mode.
     #define RGBLIGHT_EFFECT_RAINBOW_MOOD // Enable rainbow mood animation mode.
-    // RGBLIGHT_EFFECT_RAINBOW_SWIRL // Enable rainbow swirl animation mode.
+    #define RGBLIGHT_EFFECT_RAINBOW_SWIRL // Enable rainbow swirl animation mode.
     // RGBLIGHT_EFFECT_RGB_TEST // Enable RGB test animation mode.
     // RGBLIGHT_EFFECT_SNAKE // Enable snake animation mode.
     #define RGBLIGHT_EFFECT_STATIC_GRADIENT // Enable static gradient mode.
